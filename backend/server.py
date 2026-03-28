@@ -25,78 +25,87 @@ api_router = APIRouter(prefix="/api")
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# ─── Twilio SMS Setup ──────────────────────────────────────────────────────────
+# ─── Telegram Bot Setup ───────────────────────────────────────────────────────
 try:
-    from twilio.rest import Client as TwilioClient
-    TWILIO_ENABLED = all([
-        os.getenv('TWILIO_ACCOUNT_SID'),
-        os.getenv('TWILIO_AUTH_TOKEN'),
-        os.getenv('TWILIO_PHONE_NUMBER')
-    ]) and os.getenv('TWILIO_ACCOUNT_SID') != 'your_twilio_account_sid'
+    import requests
+    TELEGRAM_ENABLED = all([
+        os.getenv('TELEGRAM_BOT_TOKEN'),
+        os.getenv('TELEGRAM_CHAT_ID')
+    ]) and os.getenv('TELEGRAM_BOT_TOKEN') != 'your_telegram_bot_token'
     
-    if TWILIO_ENABLED:
-        twilio_client = TwilioClient(
-            os.getenv('TWILIO_ACCOUNT_SID'),
-            os.getenv('TWILIO_AUTH_TOKEN')
-        )
-        logger.info("✓ Twilio SMS initialized successfully")
+    if TELEGRAM_ENABLED:
+        logger.info("✓ Telegram Bot initialized successfully")
     else:
-        logger.warning("⚠ Twilio credentials not configured - SMS notifications will be mocked")
+        logger.warning("⚠ Telegram credentials not configured - notifications will be mocked")
 except Exception as e:
-    TWILIO_ENABLED = False
-    logger.warning(f"⚠ Twilio not available: {e}")
+    TELEGRAM_ENABLED = False
+    logger.warning(f"⚠ Telegram not available: {e}")
 
-def send_order_notification_sms(order_data):
-    """Send SMS notification when a new order is placed"""
+def send_order_notification_telegram(order_data):
+    """Send Telegram notification when a new order is placed"""
     try:
-        notification_phone = os.getenv('NOTIFICATION_PHONE', '+919828541068')
+        bot_token = os.getenv('TELEGRAM_BOT_TOKEN', 'your_telegram_bot_token')
+        chat_id = os.getenv('TELEGRAM_CHAT_ID', 'your_chat_id')
         
         # Format order items
         items_text = ""
         for idx, item in enumerate(order_data['items'], 1):
-            items_text += f"\n{idx}. {item['name']}"
-            items_text += f"\n   Size: {item['size']}, Qty: {item['quantity']}, Price: ₹{item['price']}"
+            items_text += f"\n{idx}. *{item['name']}*"
+            items_text += f"\n   Size: {item['size']} | Qty: {item['quantity']} | Price: ₹{item['price']:,}"
         
         # Format delivery address
         addr = order_data['shipping_address']
-        address_text = f"{addr['line1']}, {addr.get('line2', '')}, {addr['city']}, {addr['state']} - {addr['pincode']}".replace(', ,', ',')
+        address_text = f"{addr['line1']}"
+        if addr.get('line2'):
+            address_text += f", {addr['line2']}"
+        address_text += f"\n{addr['city']}, {addr['state']} - {addr['pincode']}"
         
-        # Create SMS message with all details
-        message = f"""🛍️ NEW ORDER - {order_data['order_number']}
+        # Create formatted Telegram message
+        message = f"""🛍️ *NEW ORDER RECEIVED*
 
-👤 Customer: {order_data['customer_name']}
-📞 Phone: {order_data['phone']}
+📋 *Order:* `{order_data['order_number']}`
 
-📦 ITEMS:{items_text}
+👤 *Customer Details:*
+Name: {order_data['customer_name']}
+Phone: {order_data['phone']}
 
-💰 PAYMENT:
-Subtotal: ₹{order_data['subtotal']}
-Tax: ₹{order_data['tax']}
-Shipping: ₹{order_data['shipping']}
-TOTAL: ₹{order_data['total']}
-Method: {order_data['payment_method'].upper()}
+📦 *Items Ordered:*{items_text}
 
-📍 DELIVERY ADDRESS:
+💰 *Payment Summary:*
+Subtotal: ₹{order_data['subtotal']:,}
+Tax (18%): ₹{order_data['tax']:,}
+Shipping: ₹{order_data['shipping']:,}
+*TOTAL: ₹{order_data['total']:,}*
+Payment: {order_data['payment_method'].upper()}
+
+📍 *Delivery Address:*
 {address_text}
 
-Status: {order_data['status'].upper()}
-Payment: {order_data['payment_status'].upper()}"""
+✅ Status: {order_data['status'].upper()}
+💳 Payment: {order_data['payment_status'].upper()}"""
         
-        if TWILIO_ENABLED:
-            message_obj = twilio_client.messages.create(
-                body=message,
-                from_=os.getenv('TWILIO_PHONE_NUMBER'),
-                to=notification_phone
-            )
-            logger.info(f"✓ SMS sent successfully to {notification_phone} - SID: {message_obj.sid}")
-            return True
+        if TELEGRAM_ENABLED:
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            payload = {
+                "chat_id": chat_id,
+                "text": message,
+                "parse_mode": "Markdown"
+            }
+            response = requests.post(url, json=payload, timeout=10)
+            
+            if response.status_code == 200:
+                logger.info(f"✓ Telegram notification sent successfully to chat {chat_id}")
+                return True
+            else:
+                logger.error(f"✗ Telegram API error: {response.status_code} - {response.text}")
+                return False
         else:
-            logger.info(f"[MOCK SMS] Would send to {notification_phone}:")
+            logger.info(f"[MOCK TELEGRAM] Would send to chat {chat_id}:")
             logger.info(message)
             return False
             
     except Exception as e:
-        logger.error(f"✗ Failed to send SMS notification: {e}")
+        logger.error(f"✗ Failed to send Telegram notification: {e}")
         return False
 
 # ─── Pydantic Models ───────────────────────────────────────────────────────────
@@ -475,8 +484,8 @@ async def create_order(data: CheckoutCreate, request: Request):
     elif guest_token:
         await db.carts.update_one({"guest_token": guest_token}, {"$set": {"items": [], "updated_at": datetime.now(timezone.utc).isoformat()}})
     
-    # Send SMS notification
-    send_order_notification_sms(order)
+    # Send Telegram notification
+    send_order_notification_telegram(order)
     
     logger.info(f"[MOCK EMAIL] Order confirmation sent to {data.email} for order {order_number}")
     return order
