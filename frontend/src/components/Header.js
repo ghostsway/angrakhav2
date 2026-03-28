@@ -72,7 +72,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <h1 className="font-serif text-2xl lg:text-3xl font-light tracking-[0.25em] text-foreground">
+            <h1 className="font-serif text-lg lg:text-xl font-light tracking-[0.15em] text-foreground">
               ANGARAKHA
             </h1>
           </Link>
