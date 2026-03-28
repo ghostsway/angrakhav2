@@ -34,7 +34,7 @@ export default function Header() {
             <SheetContent side="left" className="bg-brand-bg border-brand-border w-[280px]">
               <SheetHeader>
                 <SheetTitle className="flex justify-center">
-                  <img src="/angarakha-logo.png" alt="Angarakha" className="h-12 w-auto" />
+                  <img src="/angarakha-logo.png" alt="Angarakha" className="h-12 w-auto brightness-0 invert" />
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-6">
@@ -72,7 +72,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <img src="/angarakha-logo.png" alt="Angarakha" className="h-12 lg:h-14 w-auto" />
+            <img src="/angarakha-logo.png" alt="Angarakha" className="h-12 lg:h-14 w-auto brightness-0 invert" />
           </Link>
 
           {/* Desktop nav right */}
