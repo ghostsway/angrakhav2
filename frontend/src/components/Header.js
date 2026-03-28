@@ -33,8 +33,8 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side="left" className="bg-brand-bg border-brand-border w-[280px]">
               <SheetHeader>
-                <SheetTitle className="flex justify-center">
-                  <img src="/angarakha-logo.png" alt="Angarakha" className="h-20 w-auto brightness-0 invert" />
+                <SheetTitle className="font-serif text-2xl font-light tracking-[0.25em] text-foreground">
+                  ANGARAKHA
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-6">
@@ -72,7 +72,9 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <img src="/angarakha-logo.png" alt="Angarakha" className="h-14 lg:h-16 w-auto brightness-0 invert" />
+            <h1 className="font-serif text-2xl lg:text-3xl font-light tracking-[0.25em] text-foreground">
+              ANGARAKHA
+            </h1>
           </Link>
 
           {/* Desktop nav right */}
