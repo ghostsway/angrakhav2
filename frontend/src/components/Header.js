@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <header className="glass-header fixed top-0 left-0 right-0 z-50 border-b border-brand-border" data-testid="site-header">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 lg:h-24">
+        <div className="flex items-center justify-between h-24 lg:h-28">
           {/* Mobile menu */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
@@ -33,8 +33,10 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side="left" className="bg-brand-bg border-brand-border w-[280px]">
               <SheetHeader>
-                <SheetTitle className="flex justify-center">
-                  <img src="/angarakha-logo.png" alt="Angarakha" className="h-16 w-auto brightness-0 invert" />
+                <SheetTitle className="flex flex-col items-center gap-1">
+                  <span className="text-xs font-serif tracking-[0.3em] text-foreground/80">AGARWAL'S</span>
+                  <span className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Georgia, serif' }}>अंगरखा</span>
+                  <span className="text-[9px] font-serif italic tracking-[0.15em] text-foreground/60">(Destination of Ethnic Search)</span>
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-6">
@@ -71,8 +73,12 @@ export default function Header() {
           </nav>
 
           {/* Logo */}
-          <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <img src="/angarakha-logo.png" alt="Angarakha" className="h-16 lg:h-20 w-auto brightness-0 invert" />
+          <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-0" data-testid="logo-link">
+            <div className="flex flex-col items-center leading-none">
+              <span className="text-[10px] lg:text-xs font-serif tracking-[0.3em] text-foreground/80 mb-0.5">AGARWAL'S</span>
+              <h1 className="text-4xl lg:text-6xl font-bold text-foreground" style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.05em' }}>अंगरखा</h1>
+              <span className="text-[9px] lg:text-[10px] font-serif italic tracking-[0.15em] text-foreground/60 mt-0.5">(Destination of Ethnic Search)</span>
+            </div>
           </Link>
 
           {/* Desktop nav right */}
