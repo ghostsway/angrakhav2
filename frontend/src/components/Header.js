@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 const NAV_LINKS = [
   { label: 'Collections', to: '/collections' },
   { label: 'Wedding', to: '/collections/wedding' },
+  { label: 'Festive', to: '/collections/festive' },
   { label: 'About', to: '/about' },
   { label: 'Contact', to: '/contact' },
 ];
@@ -71,7 +72,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <h1 className="font-serif text-xl lg:text-2xl font-light tracking-[0.2em] text-foreground">
+            <h1 className="font-serif text-sm lg:text-base font-light tracking-[0.15em] text-foreground">
               ANGARAKHA
             </h1>
           </Link>
