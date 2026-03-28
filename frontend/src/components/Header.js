@@ -20,6 +20,18 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isHome = location.pathname === '/';
 
+  // Ensure sheet is closed on desktop
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call once on mount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <header className="glass-header fixed top-0 left-0 right-0 z-50 border-b border-brand-border" data-testid="site-header">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
