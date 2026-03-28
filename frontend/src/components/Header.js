@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, ShoppingBag, User, Menu, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -21,7 +21,7 @@ export default function Header() {
   const isHome = location.pathname === '/';
 
   // Ensure sheet is closed on desktop
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setMobileOpen(false);
