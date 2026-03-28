@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <header className="glass-header fixed top-0 left-0 right-0 z-50 border-b border-brand-border" data-testid="site-header">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Mobile menu */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
@@ -34,7 +34,7 @@ export default function Header() {
             <SheetContent side="left" className="bg-brand-bg border-brand-border w-[280px]">
               <SheetHeader>
                 <SheetTitle className="flex justify-center">
-                  <img src="/angarakha-logo.png" alt="Angarakha" className="h-12 w-auto brightness-0 invert" />
+                  <img src="/angarakha-logo.png" alt="Angarakha" className="h-16 w-auto brightness-0 invert" />
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-6">
@@ -72,7 +72,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <img src="/angarakha-logo.png" alt="Angarakha" className="h-12 lg:h-14 w-auto brightness-0 invert" />
+            <img src="/angarakha-logo.png" alt="Angarakha" className="h-16 lg:h-20 w-auto brightness-0 invert" />
           </Link>
 
           {/* Desktop nav right */}
