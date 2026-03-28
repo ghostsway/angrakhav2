@@ -68,40 +68,12 @@ export default function Header() {
             </SheetContent>
           </Sheet>
 
-          {/* Desktop nav left */}
-          <nav className="hidden lg:flex items-center gap-6">
-            {NAV_LINKS.slice(0, 1).map(link => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="text-xs font-sans uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors duration-300"
-                data-testid={`nav-${link.label.toLowerCase()}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Logo */}
-          <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <h1 className="font-serif text-base lg:text-lg font-light tracking-[0.18em] text-foreground">
+          {/* Logo - Centered */}
+          <Link to="/" className="flex-1 flex justify-center lg:absolute lg:left-1/2 lg:-translate-x-1/2" data-testid="logo-link">
+            <h1 className="font-serif text-xl lg:text-2xl font-light tracking-[0.2em] text-foreground">
               ANGARAKHA
             </h1>
           </Link>
-
-          {/* Desktop nav right */}
-          <nav className="hidden lg:flex items-center gap-6">
-            {NAV_LINKS.slice(1).map(link => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="text-xs font-sans uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors duration-300"
-                data-testid={`nav-${link.label.toLowerCase()}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
 
           {/* Right icons */}
           <div className="flex items-center gap-3 sm:gap-4">
