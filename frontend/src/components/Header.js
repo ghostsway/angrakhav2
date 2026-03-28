@@ -58,7 +58,7 @@ export default function Header() {
 
           {/* Desktop nav left */}
           <nav className="hidden lg:flex items-center gap-6">
-            {NAV_LINKS.slice(0, 2).map(link => (
+            {NAV_LINKS.slice(0, 1).map(link => (
               <Link
                 key={link.to}
                 to={link.to}
@@ -72,14 +72,14 @@ export default function Header() {
 
           {/* Logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
-            <h1 className="font-serif text-sm lg:text-base font-light tracking-[0.15em] text-foreground">
+            <h1 className="font-serif text-base lg:text-lg font-light tracking-[0.18em] text-foreground">
               ANGARAKHA
             </h1>
           </Link>
 
           {/* Desktop nav right */}
           <nav className="hidden lg:flex items-center gap-6">
-            {NAV_LINKS.slice(2).map(link => (
+            {NAV_LINKS.slice(1).map(link => (
               <Link
                 key={link.to}
                 to={link.to}
