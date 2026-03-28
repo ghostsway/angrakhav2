@@ -44,7 +44,10 @@ export default function Checkout() {
       const headers = {};
       if (!user) headers['X-Guest-Token'] = guestToken;
       const res = await axios.post(`${API}/checkout`, form, { withCredentials: true, headers });
-      setOrderComplete(res.data);
+      
+      // Redirect to order confirmation page
+      navigate(`/order-confirmation/${res.data.order_number}`);
+      
       fetchCart();
       toast.success('Order placed successfully!');
     } catch (err) {

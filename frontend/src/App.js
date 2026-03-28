@@ -12,6 +12,7 @@ import ProductPage from '@/pages/ProductPage';
 import SearchPage from '@/pages/Search';
 import CartPage from '@/pages/CartPage';
 import Checkout from '@/pages/Checkout';
+import OrderConfirmation from '@/pages/OrderConfirmation';
 import Account from '@/pages/Account';
 import Contact from '@/pages/Contact';
 import About from '@/pages/About';
@@ -39,6 +40,7 @@ function AppRouter() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
           <Route path="/account" element={<Account />} />
           <Route path="/account/orders" element={<Account />} />
           <Route path="/contact" element={<Contact />} />
