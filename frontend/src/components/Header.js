@@ -33,10 +33,8 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent side="left" className="bg-brand-bg border-brand-border w-[280px]">
               <SheetHeader>
-                <SheetTitle className="flex flex-col items-center gap-1">
-                  <span className="text-xs font-serif tracking-[0.3em] text-foreground/80">AGARWAL'S</span>
-                  <span className="text-3xl font-bold text-foreground" style={{ fontFamily: 'Georgia, serif' }}>अंगरखा</span>
-                  <span className="text-[9px] font-serif italic tracking-[0.15em] text-foreground/60">(Destination of Ethnic Search)</span>
+                <SheetTitle className="flex justify-center">
+                  <img src="/angarakha-logo.png" alt="Angarakha" className="h-20 w-auto brightness-0 invert" />
                 </SheetTitle>
               </SheetHeader>
               <nav className="mt-8 flex flex-col gap-6">
@@ -73,12 +71,8 @@ export default function Header() {
           </nav>
 
           {/* Logo */}
-          <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-0" data-testid="logo-link">
-            <div className="flex flex-col items-center leading-none">
-              <span className="text-[10px] lg:text-xs font-serif tracking-[0.3em] text-foreground/80 mb-0.5">AGARWAL'S</span>
-              <h1 className="text-4xl lg:text-6xl font-bold text-foreground" style={{ fontFamily: 'Georgia, serif', letterSpacing: '0.05em' }}>अंगरखा</h1>
-              <span className="text-[9px] lg:text-[10px] font-serif italic tracking-[0.15em] text-foreground/60 mt-0.5">(Destination of Ethnic Search)</span>
-            </div>
+          <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center" data-testid="logo-link">
+            <img src="/angarakha-logo.png" alt="Angarakha" className="h-20 lg:h-24 w-auto brightness-0 invert" />
           </Link>
 
           {/* Desktop nav right */}
