@@ -720,7 +720,7 @@ async def get_order(order_id: str, request: Request):
     if user:
         query["user_id"] = user["user_id"]
     order = await db.orders.find_one(query, {"_id": 0})
-        if not order:
+if not order:
                     raise HTTPException(status_code=404, detail="Order not found")
                 return order
 
