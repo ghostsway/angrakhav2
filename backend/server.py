@@ -20,6 +20,10 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 app = FastAPI()
+
+@app.get("/")
+async def root():
+        return {"status": "ok", "service": "angrakha-backend", "version": "2.0"}
 api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -716,6 +720,9 @@ async def get_order(order_id: str, request: Request):
     if user:
         query["user_id"] = user["user_id"]
     order = await db.orders.find_one(query, {"_id": 0})
+        if not order:
+                    raise HTTPException(status_code=404, detail="Order not found")
+                return order
 
 @api_router.get("/orders/by-number/{order_number}")
 async def get_order_by_number(order_number: str):
