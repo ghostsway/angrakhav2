@@ -721,8 +721,8 @@ async def get_order(order_id: str, request: Request):
         query["user_id"] = user["user_id"]
     order = await db.orders.find_one(query, {"_id": 0})
 if not order:
-                    raise HTTPException(status_code=404, detail="Order not found")
-                return order
+            raise HTTPException(status_code=404, detail="Order not found")
+            return order
 
 @api_router.get("/orders/by-number/{order_number}")
 async def get_order_by_number(order_number: str):
