@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'reaimport { API } from '@/lib/api';ct-router-dom';
-import { API } from '@/lib/api';
+import { useNavigate, Link } from 'react-router-dom';
+import apiClient, { API } from '@/lib/api';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
