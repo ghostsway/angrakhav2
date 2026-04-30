@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { API } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import {
@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
@@ -761,22 +760,12 @@ export default function Admin() {
     if (!user) return;
     (async () => {
       try {
-        // Try to access admin analytics - if 403, try setup
+                    // Try to access admin analytics
         const res = await axios.get(`${API}/admin/analytics`, { withCredentials: true });
         setIsAdmin(true);
         setAnalytics(res.data);
       } catch (err) {
-        if (err.response?.status === 403) {
-          // Try auto-setup as admin
-          try {
-            await axios.post(`${API}/admin/setup`, {}, { withCredentials: true });
-            setIsAdmin(true);
-            const res = await axios.get(`${API}/admin/analytics`, { withCredentials: true });
-            setAnalytics(res.data);
-            toast.success('You are now an admin');
-          } catch { setIsAdmin(false); }
-        } else { setIsAdmin(false); }
-      }
+                  setIsAdmin(false);
     })();
   }, [user]);
 

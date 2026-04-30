@@ -9,8 +9,9 @@ import asyncio
 from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import httpx
+import re
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -80,7 +81,7 @@ except Exception as e:
     RESEND_ENABLED = False
     logger.warning(f"⚠ Resend not available: {e}")
 
-def send_order_notification_telegram(order_data):
+async def send_order_notification_telegram(order_data):
     """Send Telegram notification when a new order is placed"""
     try:
         bot_token = os.getenv('TELEGRAM_BOT_TOKEN', 'your_telegram_bot_token')
@@ -428,7 +429,7 @@ async def exchange_session(request: Request, response: Response):
     await db.user_sessions.delete_many({"user_id": user_id})
     await db.user_sessions.insert_one({
         "user_id": user_id, "session_token": session_token,
-        "expires_at": datetime.now(timezone.utc).replace(day=datetime.now(timezone.utc).day) + __import__('datetime').timedelta(days=7),
+                "expires_at": datetime.now(timezone.utc) + timedelta(days=7),
         "created_at": datetime.now(timezone.utc)
     })
     response.set_cookie(key="session_token", value=session_token, httponly=True, secure=True, samesite="none", path="/", max_age=7*24*60*60)
@@ -466,9 +467,9 @@ async def list_products(
     if category:
         query["category"] = category
     if color:
-        query["color"] = {"$regex": color, "$options": "i"}
+                    query["color"] = {"$regex": re.escape(color), "$options": "i"}
     if fabric:
-        query["fabric"] = {"$regex": fabric, "$options": "i"}
+                    query["fabric"] = {"$regex": re.escape(fabric), "$options": "i"}
     if size:
         query["sizes"] = {"$in": [size]}
     if min_price is not None:
@@ -725,17 +726,15 @@ async def get_order(order_id: str, request: Request):
     return order
 
 @api_router.get("/orders/by-number/{order_number}")
-async def get_order_by_number(order_number: str):
-    """Get order by order number (for order confirmation page)"""
-    order = await db.orders.find_one({"order_number": order_number}, {"_id": 0})
+async def get_order_by_number(order_number: str, request: Request):
+    """Get order by order number - requires authentication."""
+    user = await get_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    order = await db.orders.find_one({"order_number": order_number, "user_id": user["user_id"]}, {"_id": 0})
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     return order
-
-    if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
-    return order
-
 # ─── Enquiry & Newsletter ─────────────────────────────────────────────────────
 
 @api_router.post("/enquiry")

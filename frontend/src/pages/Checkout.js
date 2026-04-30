@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import { API } from '@/lib/api';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { CheckCircle, CreditCard, Smartphone, ShieldCheck } from 'lucide-react';
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function Checkout() {
   const { cart, subtotal, itemCount, fetchCart } = useCart();

@@ -29,7 +29,7 @@ export default function AuthCallback() {
         setUser(res.data);
         navigate('/account', { replace: true, state: { user: res.data } });
       } catch (err) {
-        console.error('Auth failed:', err);
+              // console.error suppressed in production - use toast for user errors
         navigate('/', { replace: true });
       }
     })();
