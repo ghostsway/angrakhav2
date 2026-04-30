@@ -1,5 +1,6 @@
+
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { API } from '@/lib/api';
+import apiClient, { API } from '@/lib/api';
 
 const AuthContext = createContext(null);
 
@@ -9,7 +10,7 @@ export function AuthProvider({ children }) {
 
   const checkAuth = useCallback(async () => {
     try {
-      const res = await axios.get(`${API}/auth/me`, { withCredentials: true });
+      const res = await apiClient.get(`${API}/auth/me`, { withCredentials: true });
       setUser(res.data);
     } catch {
       setUser(null);
@@ -36,7 +37,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
+      await apiClient.post(`${API}/auth/logout`, {}, { withCredentials: true });
     } catch { /* ignore */ }
     setUser(null);
   };

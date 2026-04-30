@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'reaimport { API } from '@/lib/api';ct-router-dom';
 import { API } from '@/lib/api';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -35,14 +35,14 @@ export default function Checkout() {
     setSubmitting(true);
     try {
       // Mock payment
-      const payRes = await axios.post(`${API}/payment/create-order`, { amount: total * 100 });
-      await axios.post(`${API}/payment/verify`, { payment_id: payRes.data.order_id });
+      const payRes = await apiClient.post(`${API}/payment/create-order`, { amount: total * 100 });
+      await apiClient.post(`${API}/payment/verify`, { payment_id: payRes.data.order_id });
 
       // Create order
       const guestToken = localStorage.getItem('guest_token') || '';
       const headers = {};
       if (!user) headers['X-Guest-Token'] = guestToken;
-      const res = await axios.post(`${API}/checkout`, form, { withCredentials: true, headers });
+      const res = await apiClient.post(`${API}/checkout`, form, { withCredentials: true, headers });
       
       // Redirect to order confirmation page
       navigate(`/order-confirmation/${res.data.order_number}`);

@@ -22,7 +22,7 @@ export function CartProvider({ children }) {
     try {
       const headers = {};
       if (!user) headers['X-Guest-Token'] = getGuestToken();
-      const res = await axios.get(`${API}/cart`, { withCredentials: true, headers });
+      const res = await apiClient.get(`${API}/cart`, { withCredentials: true, headers });
       setCart(res.data);
     } catch {
       setCart({ items: [] });
@@ -35,7 +35,7 @@ export function CartProvider({ children }) {
     if (user) {
       const gt = localStorage.getItem('guest_token');
       if (gt) {
-        axios.post(`${API}/cart/merge`, { guest_token: gt }, { withCredentials: true })
+        apiClient.post(`${API}/cart/merge`, { guest_token: gt }, { withCredentials: true })
           .then(() => { localStorage.removeItem('guest_token'); fetchCart(); })
           .catch(() => {});
       }
@@ -47,7 +47,7 @@ export function CartProvider({ children }) {
     try {
       const headers = {};
       if (!user) headers['X-Guest-Token'] = getGuestToken();
-      const res = await axios.post(`${API}/cart/items`, item, { withCredentials: true, headers });
+      const res = await apiClient.post(`${API}/cart/items`, item, { withCredentials: true, headers });
       setCart(res.data);
     } finally { setLoading(false); }
   };
@@ -55,14 +55,14 @@ export function CartProvider({ children }) {
   const updateItem = async (itemId, quantity) => {
     const headers = {};
     if (!user) headers['X-Guest-Token'] = getGuestToken();
-    const res = await axios.put(`${API}/cart/items/${itemId}`, { quantity }, { withCredentials: true, headers });
+    const res = await apiClient.put(`${API}/cart/items/${itemId}`, { quantity }, { withCredentials: true, headers });
     setCart(res.data);
   };
 
   const removeItem = async (itemId) => {
     const headers = {};
     if (!user) headers['X-Guest-Token'] = getGuestToken();
-    const res = await axios.delete(`${API}/cart/items/${itemId}`, { withCredentials: true, headers });
+    const res = await apiClient.delete(`${API}/cart/items/${itemId}`, { withCredentials: true, headers });
     setCart(res.data);
   };
 
